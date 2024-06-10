@@ -32,7 +32,7 @@ pipeline {
             steps {
                 input {
                     message "Should we continue and apply terraform?"
-                    ok "Yes, please proceed"
+                    ok "Yes, please proceed with terraform apply"
                 }
                 sh """
                     cd 01-vpc
