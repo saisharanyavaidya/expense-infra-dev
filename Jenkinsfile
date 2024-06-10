@@ -5,6 +5,7 @@ pipeline {
     options {
         timeout(time: 30, unit: 'MINUTES')
         disableConcurrentBuilds()
+        ansiColor('xterm')
     }
     environment {
         DEPLOY_TO = 'Production'
@@ -22,7 +23,6 @@ pipeline {
         stage('plan') {
             steps {
                 sh 'echo This is Test'
-                sh 'sleep 10'
             }
         }
         stage('Deploy') {
