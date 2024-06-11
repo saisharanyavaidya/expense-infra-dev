@@ -11,6 +11,9 @@ pipeline {
         DEPLOY_TO = 'Production'
         GREETING = 'Good Morning'
     }
+    parameters {
+        choice(name: 'CHOICE', choices: ['Apply', 'Destroy'], description: 'Pick something')
+    }
     stages {
         stage('init') {
             steps {
