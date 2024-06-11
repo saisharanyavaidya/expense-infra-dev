@@ -43,8 +43,8 @@ pipeline {
                 }
             }
             input {
-                    message "Should we continue and apply terraform?"
-                    ok "Yes, please proceed with terraform apply"
+                    message "Should we continue?"
+                    ok "Yes, please proceed"
                 }
             steps {
                 sh """
