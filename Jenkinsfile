@@ -12,7 +12,7 @@ pipeline {
         GREETING = 'Good Morning'
     }
     parameters {
-        choice(name: 'CHOICE', choices: ['Apply', 'Destroy'], description: 'Pick something')
+        choice(name: 'action', choices: ['Apply', 'Destroy'], description: 'Pick if infra should be applied or destroyed')
     }
     stages {
         stage('init') {
@@ -24,6 +24,11 @@ pipeline {
             }
         }
         stage('plan') {
+            when {
+                expression {
+                    params.action == 'Apply'
+                }
+            }
             steps {
                 sh """
                     cd 01-vpc
@@ -32,6 +37,11 @@ pipeline {
             }
         }
         stage('Deploy') {
+            when {
+                expression {
+                    params.action == 'Apply'
+                }
+            }
             input {
                     message "Should we continue and apply terraform?"
                     ok "Yes, please proceed with terraform apply"
@@ -40,6 +50,19 @@ pipeline {
                 sh """
                     cd 01-vpc
                     terraform apply -auto-approve
+                """
+            }
+        }
+        stage('Destroy') {
+            when {
+                expression {
+                    params.action == 'Destroy'
+                }
+            }
+            steps {
+                sh """
+                    cd 01-vpc
+                    terraform destroy -auto-approve
                 """
             }
         }
