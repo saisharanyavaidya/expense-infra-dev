@@ -149,7 +149,15 @@ resource "aws_security_group_rule" "backend_vpn_http" {
   security_group_id = module.backend.sg_id
 }
 
-
+# backend is accepting connections from tools like Jenkins, Nexus.. added as part of Jenkins CICD
+resource "aws_security_group_rule" "backend_default_vpc" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks = ["172.31.0.0/16"] # this is default vpc cidr.. we used this as jenkins and nexus are created in default vpc and backend needs connections from them
+  security_group_id = module.backend.sg_id
+}
 ##----------------------------------------App ALB rules-----------------------------------------------------------------------
 
 # app ALB is accepting connections from vpn
@@ -225,6 +233,14 @@ resource "aws_security_group_rule" "frontend_vpn" {
   security_group_id = module.frontend.sg_id
 }
 
+resource "aws_security_group_rule" "frontend_default_vpc" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks = ["172.31.0.0/16"] # this is default vpc cidr.. we used this as jenkins and nexus are created in default vpc and backend needs connections from them
+  security_group_id = module.frontend.sg_id
+}
 
 ##----------------------------------------Web Load balancer rules-----------------------------------------------------------------------
 
